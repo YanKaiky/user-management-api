@@ -9,6 +9,7 @@ class PeopleController {
         last_name: request.body.last_name,
         email: request.body.email,
         cpf: request.body.cpf,
+        city_guid: request.body.city_guid,
         birth_date: request.body.birth_date
       };
 
@@ -55,6 +56,7 @@ class PeopleController {
         last_name: request.body.last_name,
         email: request.body.email,
         cpf: request.body.cpf,
+        city_guid: request.body.city_guid,
         birth_date: request.body.birth_date
       };
 
