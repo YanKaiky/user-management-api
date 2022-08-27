@@ -14,8 +14,10 @@ model Peoples {
   email      String   @unique
   cpf        String
   birth_date DateTime
-  createdAt  DateTime @default(now())
+  city_guid  String   @db.Uuid
+  city       Cities     @relation(fields: [city_guid], references: [guid])
   updatedAt  DateTime @default(now()) @updatedAt
+  createdAt  DateTime @default(now())
 
   @@map("peoples")
 }
@@ -26,6 +28,7 @@ model Cities {
   uf        String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  People    Peoples[]
 
   @@map("cities")
 }
