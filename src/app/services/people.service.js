@@ -20,7 +20,22 @@ class PeopleService {
   static getAllPeople = async () => {
     const people = await prisma.peoples.findMany();
 
-    return people;
+    const payload = []
+
+    for (const person of people) {
+      const city = await CitiesService.getCityByGuid(person.city_guid);
+
+      if (!city) throw createError.NotFound("CITY_NOT_FOUND");
+
+      const data = {
+        ...person,
+        city: city.name,
+      }
+
+      payload.push(data)
+    }
+
+    return payload;
   };
 
   static getPeopleByGuid = async (guid) => {
@@ -32,7 +47,16 @@ class PeopleService {
 
     if (!people) throw createError.NotFound("PEOPLE_NOT_FOUND");
 
-    return people;
+    const city = await CitiesService.getCityByGuid(people.city_guid);
+
+    if (!city) throw createError.NotFound("CITY_NOT_FOUND");
+
+    const data = {
+      ...people,
+      city: city.name,
+    }
+
+    return data;
   };
 
   static updatePeople = async (payload, guid) => {
