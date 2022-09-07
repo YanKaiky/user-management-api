@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const createError = require("http-errors");
+const sortName = require("../../utils/sort.name");
 const prisma = new PrismaClient();
 
 class CitiesService {
@@ -14,7 +15,7 @@ class CitiesService {
     const cities = await prisma.cities.findMany();
 
     sortName(cities);
-    
+
     return cities;
   };
 
