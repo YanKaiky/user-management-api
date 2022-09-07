@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const createError = require("http-errors");
+const sortName = require("../../utils/sort.name");
 const CitiesService = require("./cities.service");
 const prisma = new PrismaClient();
 
@@ -34,6 +35,8 @@ class PeopleService {
 
       payload.push(data)
     }
+
+    sortName(payload);
 
     return payload;
   };

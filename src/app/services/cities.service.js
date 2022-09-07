@@ -13,6 +13,8 @@ class CitiesService {
   static getAllCities = async () => {
     const cities = await prisma.cities.findMany();
 
+    sortName(cities);
+    
     return cities;
   };
 
