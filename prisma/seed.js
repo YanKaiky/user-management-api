@@ -4,20 +4,20 @@ const prisma = new PrismaClient();
 async function seed() {
   const citiesData = [
     {
-      name: 'Blumenau',
-      uf: 'SC',
+      name: 'Los Angeles',
+      uf: 'CA',
     },
     {
       name: 'New York',
       uf: 'NY',
     },
     {
-      name: 'Parnarama',
-      uf: 'MA',
+      name: 'Orlando',
+      uf: 'FL',
     },
     {
-      name: 'São Paulo',
-      uf: 'SP',
+      name: 'Honolulu',
+      uf: 'HI',
     },
   ]
 

@@ -11,7 +11,7 @@ router.use("/people", people);
 
 router.use("/cities", cities);
 
-router.use(async (_, __, message) => message(createError.NotFound("ROUTE_NOT_FOUND")));
+router.use(async (_, __, message) => message(createError.NotFound("Route not found")));
 
 router.use((error, _, response, __) => response.status(error.status || 500).json({ message: error.message }));
 
