@@ -9,7 +9,7 @@ class DashboardService {
     const data = {
       cities: cities.length,
       people: people.length,
-      uf: 20,
+      ufs: 20,
     }
 
     return data;
