@@ -1,16 +1,17 @@
 const express = require("express");
 const PeopleController = require("../app/controllers/people.controller");
+const auth = require("../app/middlewares/auth.middlewares");
 
 const router = express.Router();
 
-router.post("/", PeopleController.createPeople);
+router.post("/", auth, PeopleController.createPeople);
 
-router.get("/", PeopleController.getAllPeople);
+router.get("/", auth, PeopleController.getAllPeople);
 
-router.get("/:guid", PeopleController.getPeopleByGuid);
+router.get("/:guid", auth, PeopleController.getPeopleByGuid);
 
-router.put("/:guid", PeopleController.updatePeople);
+router.put("/:guid", auth, PeopleController.updatePeople);
 
-router.delete("/:guid", PeopleController.deletePeople);
+router.delete("/:guid", auth, PeopleController.deletePeople);
 
 module.exports = router;

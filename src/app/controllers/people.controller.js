@@ -7,6 +7,7 @@ class PeopleController {
       const payload = {
         name: request.body.name,
         last_name: request.body.last_name,
+        password: request.body.password,
         email: request.body.email,
         cpf: request.body.cpf,
         city_guid: request.body.city_guid,
@@ -54,6 +55,7 @@ class PeopleController {
       const payload = {
         name: request.body.name,
         last_name: request.body.last_name,
+        password: request.body.password,
         email: request.body.email,
         cpf: request.body.cpf,
         city_guid: request.body.city_guid,

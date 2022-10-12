@@ -11,11 +11,12 @@ model Peoples {
   guid       String   @id @unique() @default(uuid()) @db.Uuid
   name       String
   last_name  String?
+  password   String?
   email      String   @unique
   cpf        String
   birth_date DateTime
   city_guid  String   @db.Uuid
-  city       Cities     @relation(fields: [city_guid], references: [guid])
+  city       Cities   @relation(fields: [city_guid], references: [guid])
   updatedAt  DateTime @default(now()) @updatedAt
   createdAt  DateTime @default(now())
 
@@ -23,11 +24,11 @@ model Peoples {
 }
 
 model Cities {
-  guid      String   @id @unique() @default(uuid()) @db.Uuid
+  guid      String    @id @unique() @default(uuid()) @db.Uuid
   name      String
   uf        String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   People    Peoples[]
 
   @@map("cities")

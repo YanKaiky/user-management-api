@@ -4,6 +4,8 @@ const createError = require("http-errors");
 const sortName = require("../../utils/sort.name");
 const CitiesService = require("./cities.service");
 const prisma = new PrismaClient();
+const bcrypt = require("bcryptjs");
+const jwt = require("../../utils/jwt");
 
 class PeopleService {
   static createPeople = async (payload) => {
@@ -11,9 +13,13 @@ class PeopleService {
 
     const city = await CitiesService.getCityByGuid(payload.city_guid);
 
+    payload.password = bcrypt.hashSync(payload.password, 8);
+
     if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
     const people = await prisma.peoples.create({ data: payload });
+
+    this.removePassword(people);
 
     return people;
   };
@@ -24,6 +30,8 @@ class PeopleService {
     const payload = []
 
     for (const person of people) {
+      this.removePassword(people);
+
       const city = await CitiesService.getCityByGuid(person.city_guid);
 
       if (!city) throw createError.NotFound("CITY_NOT_FOUND");
@@ -86,6 +94,8 @@ class PeopleService {
       data: payload,
     });
 
+    this.removePassword(updatePeople);
+
     return updatePeople;
   };
 
@@ -104,6 +114,8 @@ class PeopleService {
       },
     });
   };
+
+  static removePassword = async (user) => delete user.password;
 }
 
 module.exports = PeopleService;
