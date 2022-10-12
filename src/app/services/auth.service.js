@@ -15,7 +15,7 @@ class AuthService {
         email,
       },
     });
-    
+
     if (!user) throw createError.NotFound("User not registered");
 
     const checkPassword = bcrypt.compareSync(password, user.password);
@@ -25,9 +25,11 @@ class AuthService {
 
     delete user.password;
 
-    const accessToken = await jwt.signAccessToken(user);
+    const token = {
+      token: await jwt.signAccessToken(user)
+    };
 
-    return { ...user, accessToken };
+    return token;
   }
 }
 
