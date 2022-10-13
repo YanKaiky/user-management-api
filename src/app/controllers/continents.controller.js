@@ -1,17 +1,16 @@
 const createError = require("http-errors");
-const CitiesService = require("../services/cities.service");
+const ContinentsService = require("../services/continents.service");
 
-class CitiesController {
-  static createCity = async (request, response, message) => {
+class ContinentsController {
+  static createContinent = async (request, response, message) => {
     try {
       const payload = {
         name: request.body.name,
-        state_guid: request.body.state_guid
       };
 
-      const city = await CitiesService.createCity(payload);
+      const continent = await ContinentsService.createContinent(payload);
 
-      response.status(201).json(city);
+      response.status(201).json(continent);
     } catch (error) {
       console.log(error)
 
@@ -19,53 +18,52 @@ class CitiesController {
     }
   };
 
-  static getAllCities = async (_, response, message) => {
+  static getAllContinents = async (_, response, message) => {
     try {
-      const cities = await CitiesService.getAllCities();
+      const continents = await ContinentsService.getAllContinents();
 
-      response.status(200).json(cities);
+      response.status(200).json(continents);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static getCityByGuid = async (request, response, message) => {
+  static getContinentByGuid = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
-      const city = await CitiesService.getCityByGuid(guid);
+      const continent = await ContinentsService.getContinentByGuid(guid);
 
-      response.status(200).json(city);
+      response.status(200).json(continent);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static updateCity = async (request, response, message) => {
+  static updateContinent = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
       const payload = {
         name: request.body.name,
-        state_guid: request.body.state_guid
       };
 
-      const city = await CitiesService.updateCity(payload, guid);
+      const continent = await ContinentsService.updateContinent(payload, guid);
 
-      response.status(200).json(city);
+      response.status(200).json(continent);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static deleteCity = async (request, response, message) => {
+  static deleteContinent = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
-      await CitiesService.deleteCity(guid);
+      await ContinentsService.deleteContinent(guid);
 
       response.status(200).json({ message: "Successful deleted" });
     } catch (error) {
@@ -75,4 +73,4 @@ class CitiesController {
   };
 }
 
-module.exports = CitiesController;
+module.exports = ContinentsController;
