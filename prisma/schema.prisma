@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Peoples {
+model Users {
   guid       String   @id @unique() @default(uuid()) @db.Uuid
   name       String
   last_name  String?
@@ -20,16 +20,52 @@ model Peoples {
   updatedAt  DateTime @default(now()) @updatedAt
   createdAt  DateTime @default(now())
 
-  @@map("peoples")
+  @@map("users")
+}
+
+model Continents {
+  guid      String      @id @unique() @default(uuid()) @db.Uuid
+  name      String      @unique()
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  Countries Countries[]
+
+  @@map("continents")
+}
+
+model Countries {
+  guid           String     @id @unique() @default(uuid()) @db.Uuid
+  name           String     @unique()
+  continent_guid String     @db.Uuid
+  continent      Continents @relation(fields: [continent_guid], references: [guid])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now()) @updatedAt
+  States         States[]
+
+  @@map("countries")
+}
+
+model States {
+  guid         String    @id @unique() @default(uuid()) @db.Uuid
+  name         String
+  uf           String
+  country_guid String    @db.Uuid
+  country      Countries @relation(fields: [country_guid], references: [guid])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  Cities       Cities[]
+
+  @@map("states")
 }
 
 model Cities {
-  guid      String    @id @unique() @default(uuid()) @db.Uuid
-  name      String
-  uf        String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  People    Peoples[]
+  guid       String   @id @unique() @default(uuid()) @db.Uuid
+  name       String
+  state_guid String   @db.Uuid
+  state      States   @relation(fields: [state_guid], references: [guid])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  Users      Users[]
 
   @@map("cities")
 }

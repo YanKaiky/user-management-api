@@ -1,8 +1,8 @@
 const createError = require("http-errors");
-const PeopleService = require("../services/people.service");
+const UsersService = require("../services/users.service");
 
-class PeopleController {
-  static createPeople = async (request, response, message) => {
+class UsersController {
+  static createUser = async (request, response, message) => {
     try {
       const payload = {
         name: request.body.name,
@@ -14,41 +14,41 @@ class PeopleController {
         birth_date: request.body.birth_date
       };
 
-      const people = await PeopleService.createPeople(payload);
+      const user = await UsersService.createUser(payload);
 
-      response.status(201).json(people);
+      response.status(201).json(user);
     } catch (error) {
       console.log(error)
-      
+
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static getAllPeople = async (_, response, message) => {
+  static getAllUsers = async (_, response, message) => {
     try {
-      const peoples = await PeopleService.getAllPeople();
+      const users = await UsersService.getAllUsers();
 
-      response.status(200).json(peoples);
+      response.status(200).json(users);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static getPeopleByGuid = async (request, response, message) => {
+  static getUserByGuid = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
-      const people = await PeopleService.getPeopleByGuid(guid);
+      const user = await UsersService.getUserByGuid(guid);
 
-      response.status(200).json(people);
+      response.status(200).json(user);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static updatePeople = async (request, response, message) => {
+  static updateUser = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
@@ -62,20 +62,20 @@ class PeopleController {
         birth_date: request.body.birth_date
       };
 
-      const people = await PeopleService.updatePeople(payload, guid);
+      const user = await UsersService.updateUser(payload, guid);
 
-      response.status(200).json(people);
+      response.status(200).json(user);
     } catch (error) {
       console.log(error)
       message(createError(error.statusCode, error.message));
     }
   };
 
-  static deletePeople = async (request, response, message) => {
+  static deleteUser = async (request, response, message) => {
     try {
       const guid = request.params.guid;
 
-      await PeopleService.deletePeople(guid);
+      await UsersService.deleteUser(guid);
 
       response.status(200).json({ message: "Successful deleted" });
     } catch (error) {
@@ -85,4 +85,4 @@ class PeopleController {
   };
 }
 
-module.exports = PeopleController;
+module.exports = UsersController;

@@ -16,7 +16,7 @@ class AuthController {
       response.status(200).json(access);
     } catch (error) {
       console.log(error)
-      
+
       message(createError(error.statusCode, error.message));
     }
   };

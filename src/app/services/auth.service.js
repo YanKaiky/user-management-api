@@ -10,7 +10,7 @@ class AuthService {
   static async login(payload) {
     const { email, password } = payload;
 
-    const user = await prisma.peoples.findUnique({
+    const user = await prisma.users.findUnique({
       where: {
         email,
       },

@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 class DashboardService {
   static getValues = async () => {
-    const people = await prisma.peoples.findMany({});
+    const people = await prisma.users.findMany({});
     const cities = await prisma.cities.findMany({});
 
     const data = {

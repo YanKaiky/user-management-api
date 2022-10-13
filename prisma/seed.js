@@ -1,9 +1,7 @@
-const Cities = require('./seeders/cities');
-const People = require('./seeders/people');
+const Continents = require("./seeders/continents");
 
 async function seed() {
-  await Cities.cities();
-  await People.people();
+  await Continents.continents();
 }
 
 seed();

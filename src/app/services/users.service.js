@@ -5,10 +5,9 @@ const sortName = require("../../utils/sort.name");
 const CitiesService = require("./cities.service");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
-const jwt = require("../../utils/jwt");
 
-class PeopleService {
-  static createPeople = async (payload) => {
+class UsersService {
+  static createUser = async (payload) => {
     payload.birth_date = new Date(payload.birth_date).toISOString()
 
     const city = await CitiesService.getCityByGuid(payload.city_guid);
@@ -17,27 +16,27 @@ class PeopleService {
 
     if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
-    const people = await prisma.peoples.create({ data: payload });
+    const user = await prisma.users.create({ data: payload });
 
-    this.removePassword(people);
+    this.removePassword(user);
 
-    return people;
+    return user;
   };
 
-  static getAllPeople = async () => {
-    const people = await prisma.peoples.findMany();
+  static getAllUsers = async () => {
+    const users = await prisma.users.findMany();
 
     const payload = []
 
-    for (const person of people) {
-      this.removePassword(people);
+    for (const user of users) {
+      this.removePassword(user);
 
-      const city = await CitiesService.getCityByGuid(person.city_guid);
+      const city = await CitiesService.getCityByGuid(user.city_guid);
 
       if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
       const data = {
-        ...person,
+        ...user,
         city: city.name,
       }
 
@@ -49,35 +48,35 @@ class PeopleService {
     return payload;
   };
 
-  static getPeopleByGuid = async (guid) => {
-    const people = await prisma.peoples.findUnique({
+  static getUserByGuid = async (guid) => {
+    const user = await prisma.users.findUnique({
       where: {
         guid: guid,
       },
     });
 
-    if (!people) throw createError.NotFound("PEOPLE_NOT_FOUND");
+    if (!user) throw createError.NotFound("USER_NOT_FOUND");
 
-    const city = await CitiesService.getCityByGuid(people.city_guid);
+    const city = await CitiesService.getCityByGuid(user.city_guid);
 
     if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
     const data = {
-      ...people,
+      ...user,
       city: city.name,
     }
 
     return data;
   };
 
-  static updatePeople = async (payload, guid) => {
-    const people = await prisma.peoples.findUnique({
+  static updateUser = async (payload, guid) => {
+    const user = await prisma.users.findUnique({
       where: {
         guid: guid,
       },
     });
 
-    if (!people) throw createError.NotFound("PEOPLE_NOT_FOUND");
+    if (!user) throw createError.NotFound("USER_NOT_FOUND");
 
     if (payload.birth_date) payload.birth_date = new Date(payload.birth_date).toISOString()
 
@@ -87,28 +86,28 @@ class PeopleService {
       if (!city) throw createError.NotFound("CITY_NOT_FOUND");
     }
 
-    const updatePeople = await prisma.peoples.update({
+    const updateUser = await prisma.users.update({
       where: {
         guid: guid,
       },
       data: payload,
     });
 
-    this.removePassword(updatePeople);
+    this.removePassword(updateUser);
 
-    return updatePeople;
+    return updateUser;
   };
 
-  static deletePeople = async (guid) => {
-    const people = await prisma.peoples.findUnique({
+  static deleteUser = async (guid) => {
+    const user = await prisma.users.findUnique({
       where: {
         guid: guid,
       },
     });
 
-    if (!people) throw createError.NotFound("PEOPLE_NOT_FOUND");
+    if (!user) throw createError.NotFound("USER_NOT_FOUND");
 
-    await prisma.peoples.delete({
+    await prisma.users.delete({
       where: {
         guid: guid,
       },
@@ -118,4 +117,4 @@ class PeopleService {
   static removePassword = async (user) => delete user.password;
 }
 
-module.exports = PeopleService;
+module.exports = UsersService;

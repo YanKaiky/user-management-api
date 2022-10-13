@@ -4,7 +4,7 @@ const createError = require("http-errors");
 
 const auth = require("./auth");
 const dashboard = require("./dashboard");
-const people = require("./people");
+const users = require("./users");
 const cities = require("./cities");
 
 router.get("/", (_, response) => response.status(200).json({ message: `© ${new Date().getUTCFullYear()}, User Management` }));
@@ -13,7 +13,7 @@ router.use("/login", auth);
 
 router.use("/dashboard", dashboard);
 
-router.use("/people", people);
+router.use("/users", users);
 
 router.use("/cities", cities);
 
