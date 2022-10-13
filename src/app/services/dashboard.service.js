@@ -3,13 +3,21 @@ const prisma = new PrismaClient();
 
 class DashboardService {
   static getValues = async () => {
-    const people = await prisma.users.findMany({});
+    const continents = await prisma.continents.findMany({});
+    const countries = await prisma.countries.findMany({});
+    const states = await prisma.states.findMany({});
     const cities = await prisma.cities.findMany({});
+    const users = await prisma.users.findMany({});
 
     const data = {
+      continents: {
+        values: continents,
+        length: continents.length,
+      },
+      countries: countries.length,
+      states: states.length,
       cities: cities.length,
-      people: people.length,
-      ufs: 20,
+      users: users.length,
     }
 
     return data;
