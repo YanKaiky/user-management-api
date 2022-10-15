@@ -2,11 +2,16 @@ require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const createError = require("http-errors");
 const sortName = require("../../utils/sort.name");
+const CountriesService = require("./countries.service");
 const prisma = new PrismaClient();
 
 class StatesService {
   static createState = async (payload) => {
     const state = await prisma.states.create({ data: payload });
+
+    const country = await CountriesService.getCountryByGuid(payload.country_guid);
+
+    if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
 
     return state;
   };
@@ -14,9 +19,24 @@ class StatesService {
   static getAllStates = async () => {
     const states = await prisma.states.findMany();
 
-    sortName(states);
+    const payload = []
 
-    return states;
+    for (const state of states) {
+      const country = await CountriesService.getCountryByGuid(state.country_guid);
+
+      if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
+
+      const data = {
+        ...state,
+        country: country.name,
+      }
+
+      payload.push(data)
+    }
+
+    sortName(payload);
+
+    return payload;
   };
 
   static getStateByGuid = async (guid) => {
@@ -39,6 +59,12 @@ class StatesService {
     });
 
     if (!state) throw createError.NotFound("STATE_NOT_FOUND");
+
+    if (payload.country_guid) {
+      const country = await CountriesService.getCountryByGuid(payload.country_guid);
+
+      if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
+    }
 
     const updateState = await prisma.states.update({
       where: {

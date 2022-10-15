@@ -10,9 +10,9 @@ class UsersService {
   static createUser = async (payload) => {
     payload.birth_date = new Date(payload.birth_date).toISOString()
 
-    const city = await CitiesService.getCityByGuid(payload.city_guid);
-
     payload.password = bcrypt.hashSync(payload.password, 8);
+
+    const city = await CitiesService.getCityByGuid(payload.city_guid);
 
     if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
