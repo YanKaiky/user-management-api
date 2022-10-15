@@ -5,6 +5,8 @@ const sortName = require("../../utils/sort.name");
 const CitiesService = require("./cities.service");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
+const StatesService = require("./states.service");
+const CountriesService = require("./countries.service");
 
 class UsersService {
   static createUser = async (payload) => {
@@ -35,9 +37,19 @@ class UsersService {
 
       if (!city) throw createError.NotFound("CITY_NOT_FOUND");
 
+      const state = await StatesService.getStateByGuid(city.state_guid);
+
+      if (!state) throw createError.NotFound("STATE_NOT_FOUND");
+
+      const country = await CountriesService.getCountryByGuid(state.country_guid);
+
+      if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
+
       const data = {
         ...user,
         city: city.name,
+        state: state.name,
+        country: country.name,
       }
 
       payload.push(data)

@@ -2,6 +2,7 @@ require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
 const createError = require("http-errors");
 const sortName = require("../../utils/sort.name");
+const CountriesService = require("./countries.service");
 const StatesService = require("./states.service");
 const prisma = new PrismaClient();
 
@@ -26,9 +27,14 @@ class CitiesService {
 
       if (!state) throw createError.NotFound("STATE_NOT_FOUND");
 
+      const country = await CountriesService.getCountryByGuid(state.country_guid);
+
+      if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
+
       const data = {
         ...city,
         state: state.name,
+        country: country.name,
       }
 
       payload.push(data)
