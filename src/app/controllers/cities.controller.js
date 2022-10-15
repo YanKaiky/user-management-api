@@ -19,9 +19,15 @@ class CitiesController {
     }
   };
 
-  static getAllCities = async (_, response, message) => {
+  static getAllCities = async (request, response, message) => {
     try {
-      const cities = await CitiesService.getAllCities();
+      const state_guid = request.query.state_guid;
+
+      let cities;
+
+      if (state_guid) cities = await CitiesService.getCitiesByState(state_guid);
+
+      if (!state_guid) cities = await CitiesService.getAllCities();
 
       response.status(200).json(cities);
     } catch (error) {

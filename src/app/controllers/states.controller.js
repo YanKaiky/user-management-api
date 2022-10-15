@@ -20,9 +20,15 @@ class StatesController {
     }
   };
 
-  static getAllStates = async (_, response, message) => {
+  static getAllStates = async (request, response, message) => {
     try {
-      const states = await StatesService.getAllStates();
+      const country_guid = request.query.country_guid;
+
+      let states;
+
+      if (country_guid) states = await StatesService.getStatesByCountry(country_guid);
+
+      if (!country_guid) states = await StatesService.getAllStates();
 
       response.status(200).json(states);
     } catch (error) {

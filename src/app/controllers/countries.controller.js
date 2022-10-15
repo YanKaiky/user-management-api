@@ -19,9 +19,15 @@ class CountriesController {
     }
   };
 
-  static getAllCountries = async (_, response, message) => {
+  static getAllCountries = async (request, response, message) => {
     try {
-      const countries = await CountriesService.getAllCountries();
+      const continent_guid = request.query.continent_guid;
+
+      let countries;
+
+      if (continent_guid) countries = await CountriesService.getCountriesByContinent(continent_guid);
+
+      if (!continent_guid) countries = await CountriesService.getAllCountries();
 
       response.status(200).json(countries);
     } catch (error) {

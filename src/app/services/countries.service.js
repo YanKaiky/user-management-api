@@ -39,6 +39,24 @@ class CountriesService {
     return payload;
   };
 
+  static getCountriesByContinent = async (continent_guid) => {
+    const continent = await prisma.continents.findUnique({
+      where: {
+        guid: continent_guid,
+      },
+    });
+
+    if (!continent) throw createError.NotFound("CONTINENT_NOT_FOUND");
+
+    const countries = await prisma.countries.findMany({
+      where: {
+        continent_guid,
+      }
+    })
+
+    return countries;
+  };
+
   static getCountryByGuid = async (guid) => {
     const country = await prisma.countries.findUnique({
       where: {

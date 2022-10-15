@@ -39,6 +39,24 @@ class CitiesService {
     return payload;
   };
 
+  static getCitiesByState = async (state_guid) => {
+    const state = await prisma.states.findUnique({
+      where: {
+        guid: state_guid,
+      },
+    });
+
+    if (!state) throw createError.NotFound("STATE_NOT_FOUND");
+
+    const cities = await prisma.cities.findMany({
+      where: {
+        state_guid,
+      }
+    })
+
+    return cities;
+  };
+
   static getCityByGuid = async (guid) => {
     const city = await prisma.cities.findUnique({
       where: {

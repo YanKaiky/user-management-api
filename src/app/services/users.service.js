@@ -48,6 +48,26 @@ class UsersService {
     return payload;
   };
 
+  static getUsersByCity = async (city_guid) => {
+    const city = await prisma.cities.findUnique({
+      where: {
+        guid: city_guid,
+      },
+    });
+
+    if (!city) throw createError.NotFound("CITY_NOT_FOUND");
+
+    const users = await prisma.users.findMany({
+      where: {
+        city_guid,
+      }
+    })
+
+    for (const user of users) this.removePassword(user);
+
+    return users;
+  };
+
   static getUserByGuid = async (guid) => {
     const user = await prisma.users.findUnique({
       where: {

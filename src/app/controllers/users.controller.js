@@ -24,9 +24,15 @@ class UsersController {
     }
   };
 
-  static getAllUsers = async (_, response, message) => {
+  static getAllUsers = async (request, response, message) => {
     try {
-      const users = await UsersService.getAllUsers();
+      const city_guid = request.query.city_guid;
+
+      let users;
+
+      if (city_guid) users = await UsersService.getUsersByCity(city_guid);
+
+      if (!city_guid) users = await UsersService.getAllUsers();
 
       response.status(200).json(users);
     } catch (error) {
