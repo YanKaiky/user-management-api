@@ -10,10 +10,6 @@ class DashboardService {
     const users = await prisma.users.findMany({});
 
     const data = {
-      continents: {
-        values: continents,
-        length: continents.length,
-      },
       countries: countries.length,
       states: states.length,
       cities: cities.length,
