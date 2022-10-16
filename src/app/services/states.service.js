@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 
 class StatesService {
   static createState = async (payload) => {
-    const state = await prisma.states.create({ data: payload });
-
     const country = await CountriesService.getCountryByGuid(payload.country_guid);
 
     if (!country) throw createError.NotFound("COUNTRY_NOT_FOUND");
+
+    const state = await prisma.states.create({ data: payload });
 
     return state;
   };

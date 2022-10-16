@@ -8,11 +8,11 @@ const prisma = new PrismaClient();
 
 class CitiesService {
   static createCity = async (payload) => {
-    const city = await prisma.cities.create({ data: payload });
-
     const state = await StatesService.getStateByGuid(payload.state_guid);
 
     if (!state) throw createError.NotFound("STATE_NOT_FOUND");
+
+    const city = await prisma.cities.create({ data: payload });
 
     return city;
   };

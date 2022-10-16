@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 
 class CountriesService {
   static createCountry = async (payload) => {
-    const country = await prisma.countries.create({ data: payload });
-
     const continent = await ContinentsService.getContinentByGuid(payload.continent_guid);
 
     if (!continent) throw createError.NotFound("CONTINENT_NOT_FOUND");
+
+    const country = await prisma.countries.create({ data: payload });
 
     return country;
   };
